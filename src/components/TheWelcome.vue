@@ -12,13 +12,18 @@
             Minor
           </label>
         </div>
-        <button type="button" class="btn btn-primary" @click="handleSelectNote">Add</button>
+        <br/>
+        <div class="div-buttons">
+          <button type="button" class="btn btn-primary" @click="handleSelectNote">Add</button>
+          <button type="button" class="btn btn-primary bt-checkbox" @click="handleCleanSelectNote">Clean</button>
+        </div>
       </div>
+      <hr/>
       <div>
         <label for="basic-url" class="form-label">Selected Notes</label>
         <input type="text" class="form-control" aria-label="Selected Notes" aria-describedby="basic-addon1" disabled :value="getSelectedNotes">
       </div>
-      
+      <hr/>
       <button type="button" class="btn btn-primary" @click="generateScale">Gerar</button>
     </div>
 
@@ -70,6 +75,10 @@ export default {
         this.selectedNotes.push(this.selectedNote);
       }
     },
+    handleCleanSelectNote() {
+      this.notesToScale = [];
+      this.selectedNotes = [];
+    },
     generateScale() {
       this.service.getScale(this.notesToScale).then(res => {
         this.scale = res.data.notes;
@@ -81,5 +90,9 @@ export default {
 <style>
 .main-div {
   width: 100%;
+}
+
+.bt-checkbox {
+  margin-left: 15px;
 }
 </style>
