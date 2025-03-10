@@ -73,6 +73,7 @@ export default {
         const note = this.isMinor? `${this.selectedNote}m` : this.selectedNote;
         this.notesToScale.push(note);
         this.selectedNotes.push(this.selectedNote);
+        this.isMinor = false;
       }
     },
     handleCleanSelectNote() {
