@@ -12,10 +12,10 @@
 import Song from '@/tone/tone';
 
 export default {
-    props: ['base', 'scale'],
+    props: ['base', 'scale', 'relationScales'],
     data() {
         return {
-            tone: new Song(this.base, this.scale),
+            tone: new Song(this.base, this.scale, this.relationScales),
         }
     },
     methods: {

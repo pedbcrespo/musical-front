@@ -30,7 +30,7 @@
     <div class="song-part" v-if="scale.length > 0">
       <input type="text" class="form-control" aria-label="Scale" aria-describedby="basic-addon1" disabled :value="getGeneratedScale">
       <hr/>
-      <play-song :base="selectedNotes" :scale="scale"/>
+      <play-song :base="selectedNotes" :scale="scale" :relationScales="relationScales"/>
     </div>
   </div>
 </template>
@@ -59,6 +59,7 @@ export default {
       notesToScale: [],
       selectedNote: '',
       scale: [],
+      relationScales: null,
       isMinor: false,
     }
   },
@@ -82,7 +83,8 @@ export default {
     },
     generateScale() {
       this.service.getScale(this.notesToScale).then(res => {
-        this.scale = res.data.notes;
+        this.scale = res.data.allNotesInterserct;
+        this.relationScales = res.data.relationScales;
       });
     }
   }

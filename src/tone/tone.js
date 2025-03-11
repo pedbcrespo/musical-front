@@ -3,16 +3,15 @@ import * as Tone from "tone";
 const getRandomInt = (max) => Math.floor(Math.random() * max);
 
 export default class Song {
-    constructor(base, scale) {
+    constructor(base, scale, relationScales) {
         this.base = base;
         this.scale = scale;
+        this.relationScales = relationScales;
         this.baseSequence = null;
         this.soloLoop = null;
     }
 
     play() {
-        console.log(this.base);
-        console.log(this.scale);
         this.playBase();
         this.playSolo();
 
@@ -25,7 +24,7 @@ export default class Song {
 
     playBase() { 
         const synth = new Tone.FMSynth().toDestination();
-        const notes = this.base.map(note => `${note}3`)
+        const notes = this.base.map(note => `${note}3`);
         this.baseSequence = new Tone.Sequence((time, note) => {
             synth.triggerAttackRelease(note, "8n", time);
         }, notes, "4n");
@@ -35,15 +34,28 @@ export default class Song {
 
     playSolo() {
         const synth = new Tone.FMSynth().toDestination();
-        const getRandomNote = () => {
-            const randomIndex = getRandomInt(this.scale.length);
-            const randomOcta = 4 + getRandomInt(2);
-            return `${this.scale[randomIndex]}${randomOcta}`;
+
+        const getRandomNote = (scale) => {
+            if (!scale || scale.length === 0) return "C4";
+            const randomIndex = getRandomInt(scale.length);
+            const randomOctave = 4 + getRandomInt(2);
+            return `${scale[randomIndex]}${randomOctave}`;
         };
 
+        const getScaleFromNote = (note) => {
+            return this.relationScales[note] || this.scale;
+        };
+
+        let baseIndex = 0;
+
         this.soloLoop = new Tone.Loop((time) => {
-            const note = getRandomNote();
+            const baseNote = this.base[baseIndex % this.base.length];
+            const scale = getScaleFromNote(baseNote);
+            const note = getRandomNote(scale);
+
             synth.triggerAttackRelease(note, "16n", time);
+
+            baseIndex++;
         }, "8n");
 
         this.soloLoop.start(0);
